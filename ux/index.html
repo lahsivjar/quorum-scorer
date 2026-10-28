@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quorum Score — UX templates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,520;9..144,640&family=Outfit:wght@380;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --felt: #1e332b;
+    --felt-2: #274338;
+    --ink: #1b2420;
+    --muted: #6d655b;
+    --paper: #f6f1e6;
+    --paper-2: #fffaf2;
+    --line: #e3d9c8;
+    --green: #1d6b45;
+    --green-soft: #e4f3ea;
+    --rust: #a8432c;
+    --rust-soft: #f8ebe4;
+    --seal: #d86a32;
+    --seal-soft: #fde6d4;
+    --bea: #2456a6;
+    --cam: #8a4b08;
+    --shadow: 0 30px 60px rgba(0, 0, 0, .28);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Outfit, "Avenir Next", system-ui, sans-serif;
+    color: #f4efe4;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, rgba(255,255,255,.06), transparent 50%),
+      var(--felt);
+    min-height: 100vh;
+  }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  h1, h2, .num, .eq { font-family: Fraunces, Georgia, serif; font-weight: 520; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 28px 80px; }
+  header.page { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 28px; }
+  header.page h1 { margin: 0 0 6px; font-size: 42px; letter-spacing: -0.03em; color: #f7f1e4; }
+  header.page p { margin: 0; max-width: 640px; color: #d9d0c2; line-height: 1.45; }
+  .reset {
+    border: 1px solid rgba(255,255,255,.25);
+    background: transparent;
+    color: #f4efe4;
+    border-radius: 999px;
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+  .hero { display: grid; grid-template-columns: 390px 1fr; gap: 36px; align-items: start; }
+  .notes { padding-top: 18px; }
+  .notes h2 { margin: 0 0 8px; font-size: 28px; color: #f7f1e4; }
+  .notes ol { margin: 0; padding-left: 18px; color: #e4dccb; line-height: 1.5; }
+  .notes li { margin: 8px 0; }
+  .notes strong { color: white; font-weight: 600; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .pills button, .jump {
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0,0,0,.15);
+    color: #f4efe4;
+    border-radius: 999px;
+    padding: 7px 12px;
+  }
+  .pills button[aria-current="true"] { background: var(--seal); border-color: var(--seal); color: #2a140c; font-weight: 600; }
+  .gallery { margin-top: 54px; }
+  .gallery h2 { margin: 0 0 6px; font-size: 28px; }
+  .gallery .lede { margin: 0 0 18px; color: #d9d0c2; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 18px; }
+  .shot { min-width: 0; }
+  .shot-scale { width: 281px; height: 608px; overflow: hidden; }
+  .shot .phone { transform: scale(.72); transform-origin: top left; pointer-events: none; }
+  .jump { margin-top: 8px; }
+  .phone {
+    width: 390px; height: 844px; border-radius: 42px; padding: 10px;
+    background: #0c100e; box-shadow: var(--shadow), inset 0 0 0 2px #2a302c;
+  }
+  .screen {
+    height: 100%; border-radius: 32px; overflow: hidden; background: var(--paper);
+    color: var(--ink); display: flex; flex-direction: column; position: relative;
+  }
+  .status { height: 28px; display: flex; justify-content: space-between; align-items: center; padding: 10px 18px 0; font-size: 12px; font-weight: 600; color: var(--ink); }
+  .scroll { flex: 1; overflow: auto; padding: 8px 16px 24px; }
+  .scroll::-webkit-scrollbar { width: 0; }
+  .tabbar {
+    height: 72px; border-top: 1px solid var(--line); background: var(--paper-2);
+    display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 8px 10px 14px;
+  }
+  .tabbar button {
+    border: 0; background: transparent; color: var(--muted); border-radius: 14px; font-size: 13px; font-weight: 600;
+  }
+  .tabbar button[aria-current="true"] { color: var(--ink); background: #efe7d8; }
+  .toprow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  .toprow .title { margin-bottom: 0; }
+  .back, .textbtn {
+    border: 0; background: transparent; color: var(--green); font-weight: 600; padding: 6px 0;
+  }
+  .kicker { margin: 0; color: var(--muted); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+  .title { margin: 2px 0 12px; font-size: 34px; letter-spacing: -.03em; line-height: 1; }
+  .grand {
+    background: var(--ink); color: #f6f1e6; border-radius: 22px; padding: 14px 14px 12px;
+  }
+  .grand .kicker { color: #c9c0b2; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .who {
+    border: 0; background: transparent; color: inherit; text-align: left; border-radius: 14px; padding: 6px 6px 8px;
+  }
+  .who[aria-pressed="true"] { background: rgba(255,255,255,.08); }
+  .who .name { display: block; font-size: 13px; color: #d9d0c2; }
+  .who .num { display: block; font-size: 32px; line-height: 1; margin-top: 2px; }
+  .grand .pos { color: #b7e7c8; }
+  .grand .neg { color: #ffb4a2; }
+  .grand .zero { color: #c9c0b2; }
+  .eq { margin: 8px 6px 0; font-size: 15px; line-height: 1.35; color: #f0e6d4; }
+  .eq .hot { color: #ffc7a3; }
+  .banner {
+    margin-top: 12px; background: var(--seal-soft); border-radius: 18px; padding: 12px 12px 12px 14px;
+    display: flex; justify-content: space-between; gap: 10px; align-items: center;
+  }
+  .banner b { display: block; font-size: 14px; }
+  .banner span { display: block; color: #6d4532; font-size: 13px; margin-top: 2px; }
+  .banner button, .primary, .secondary {
+    border: 0; border-radius: 999px; padding: 10px 14px; font-weight: 600;
+  }
+  .banner button, .primary { background: var(--ink); color: var(--paper); }
+  .primary { width: 100%; padding: 14px 16px; font-size: 16px; }
+  .primary:disabled { background: #cfc6b8; color: #6d655b; }
+  .secondary { background: transparent; color: var(--ink); width: 100%; }
+  .chips { display: flex; gap: 8px; overflow: auto; padding: 14px 0 8px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--paper-2); color: var(--ink);
+    border-radius: 999px; padding: 8px 12px; white-space: nowrap; font-weight: 600; font-size: 14px;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .game {
+    background: var(--paper-2); border: 1px solid var(--line); border-radius: 18px; padding: 8px 12px 10px; margin-top: 8px;
+  }
+  .game header { display: flex; justify-content: space-between; align-items: baseline; }
+  .game h3 { margin: 0; font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 520; }
+  .hint { color: var(--muted); font-size: 13px; line-height: 1.4; margin: 8px 2px 0; }
+  .pos { color: var(--green); }
+  .neg { color: var(--rust); }
+  .zero { color: var(--muted); }
+  .card {
+    background: var(--paper-2); border-radius: 22px; padding: 16px; margin-top: 12px;
+  }
+  .group-card { width: 100%; text-align: left; border: 0; background: var(--paper-2); border-radius: 22px; padding: 16px; margin-top: 12px; }
+  .group-card .row, .person { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--seal); display: inline-block; margin-right: 6px; }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+    color: white; font-weight: 600; flex: none;
+  }
+  .ada { background: var(--green); }
+  .bea { background: var(--bea); }
+  .cam { background: var(--cam); }
+  .person { padding: 10px 0; border-top: 1px solid var(--line); justify-content: flex-start; gap: 10px; }
+  .person:first-of-type { border-top: 0; }
+  .person .stepper { margin-left: auto; }
+  .stepper { display: flex; align-items: center; gap: 8px; }
+  .stepper button {
+    width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--line); background: white; color: var(--ink); font-size: 20px;
+  }
+  .stepper .num { width: 42px; text-align: center; font-size: 24px; }
+  .field {
+    width: 100%; border: 1px solid var(--line); background: white; border-radius: 14px; padding: 12px 12px; color: var(--ink);
+  }
+  label.lbl { display: block; font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
+  .compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-top: 8px; }
+  .compare .box { background: white; border-radius: 16px; padding: 10px 12px; }
+  .compare .box b { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .arrow { color: var(--muted); }
+  .pips { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
+  .pip { width: 10px; height: 10px; border-radius: 99px; background: #ddd4c6; }
+  .pip.on { background: var(--green); }
+  .keycard {
+    margin-top: 18px; border-radius: 22px; padding: 16px; background: var(--ink); color: #f6f1e6;
+  }
+  .fp { font-family: Fraunces, Georgia, serif; font-size: 28px; letter-spacing: .04em; margin: 8px 0; }
+  .stack { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .warn { background: var(--rust-soft); color: #6d2e1e; border-radius: 16px; padding: 12px; font-size: 14px; line-height: 1.4; }
+  .toast {
+    position: absolute; left: 16px; right: 16px; top: 48px; background: var(--ink); color: white;
+    border-radius: 14px; padding: 12px 14px; font-size: 14px; z-index: 2;
+  }
+  .fab {
+    position: absolute; right: 18px; bottom: 86px; width: 58px; height: 58px; border-radius: 18px;
+    border: 0; background: var(--seal); color: #2a140c; font-size: 32px; line-height: 1; box-shadow: 0 8px 18px rgba(216,106,50,.35);
+  }
+  .ledger { padding: 12px 0; border-top: 1px solid var(--line); }
+  .tag { display: inline-block; background: #efe7d8; border-radius: 999px; padding: 3px 8px; font-size: 12px; font-weight: 600; }
+  .seat { display: flex; gap: 10px; align-items: center; padding: 10px 0; }
+  .empty-seat { width: 36px; height: 36px; border-radius: 50%; border: 1.5px dashed #b7ad9e; }
+  body.solo header.page, body.solo .notes, body.solo .gallery { display: none !important; }
+  body.solo .wrap { max-width: 430px; padding: 12px; }
+  body.solo .hero { display: block; }
+  @media (max-width: 900px) {
+    .hero, .grid { grid-template-columns: 1fr; }
+    header.page { flex-direction: column; align-items: start; }
+    .shot-scale { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page">
+    <div>
+      <h1>Quorum Score</h1>
+      <p>Phone templates for both stores. The grand total stays on the board. Each game is a signed slice of that total. A score lands only after 2 of 3 people sign the same line.</p>
+    </div>
+    <button class="reset" id="reset" type="button">Reset demo</button>
+  </header>
+  <div class="hero">
+    <div id="hero"></div>
+    <div class="notes">
+      <h2 id="blurb-title">Board</h2>
+      <ol id="blurb"></ol>
+      <div class="pills" id="pills"></div>
+      <div class="pills"><button type="button" id="cosign">Demo: next member signs</button></div>
+    </div>
+  </div>
+  <section class="gallery">
+    <h2>All screens</h2>
+    <p class="lede">Same scenes, frozen, so the flow can be read without clicking. Jump loads that screen in the phone above.</p>
+    <div class="grid" id="gallery"></div>
+  </section>
+</div>
+<script>
+const NAMES = { ada: "Ada", bea: "Bea", cam: "Cam" };
+const ORDER = ["ada", "bea", "cam"];
+const SCREENS = [
+  ["welcome", "Welcome"],
+  ["groups", "Groups"],
+  ["board", "Board"],
+  ["record", "Record"],
+  ["review", "Review"],
+  ["activity", "Activity"],
+  ["people", "People"],
+  ["forming", "Starting"],
+  ["frozen", "Stopped"]
+];
+const BLURB = {
+  welcome: ["The phone creates one key and shows its fingerprint.", "There is no account. A lost phone is replaced by the group, one tally at a time."],
+  groups: ["Each card is one tally.", "An orange dot means a score is waiting for your signature and is not in the totals yet."],
+  board: ["Grand total is always the top card.", "Tap a person to see their games add up to that number.", "Tap a game to focus it. The grand total stays.", "Orange means the majority has not signed, so those points are off the board."],
+  record: ["Pick the game, then the points.", "You sign by asking the group. One more signature commits every line in the batch.", "The demo starts with Bea's Chess score still open, so Ask stays off until that is signed or you press Reset after clearing it."],
+  review: ["Before and after are shown for the game and for the grand total.", "Cam can ignore it. Two signatures are enough.", "Signing here is what makes Cam's Chess points real."],
+  activity: ["This is the signed history, newest first.", "Undo asks for a new majority. It does not erase the row, and it does not change the totals until the second signature arrives."],
+  people: ["At three people, nobody can be removed.", "Scores still need only two signatures. Add a fourth person before a removal exists."],
+  forming: ["The roster is the product. Sign stays off until three people are on it.", "Every founder signs that same list. The creator has no extra power after that."],
+  frozen: ["Two signed histories disagreed, so the tally stops.", "The numbers are the last totals from before the split. Record is gone."]
+};
+
+function fresh() {
+  return {
+    screen: "board",
+    game: "all",
+    member: "ada",
+    games: {
+      Catan: { ada: 10, bea: 5, cam: 0 },
+      Spades: { ada: -2, bea: 0, cam: 7 },
+      Chess: { ada: 10, bea: 6, cam: 0 }
+    },
+    pending: {
+      by: "bea",
+      game: "Chess",
+      lines: [{ member: "cam", delta: 4, note: "endgame" }],
+      signed: ["bea"],
+      kind: "score"
+    },
+    activity: [
+      { game: "Chess", lines: [{ member: "ada", delta: 10, note: "" }, { member: "bea", delta: 6, note: "" }], by: ["ada", "cam"], when: "Yesterday" },
+      { game: "Spades", lines: [{ member: "cam", delta: 7, note: "" }, { member: "ada", delta: -2, note: "set" }], by: ["bea", "cam"], when: "Tue" },
+      { game: "Catan", lines: [{ member: "ada", delta: 10, note: "won" }, { member: "bea", delta: 5, note: "" }], by: ["ada", "bea"], when: "Mon" }
+    ],
+    draft: { game: "Catan", custom: "", lines: { ada: 0, bea: 0, cam: 0 }, note: "" },
+    toast: ""
+  };
+}
+
+let state = fresh();
+
+function fmt(n) {
+  if (n > 0) return "+" + n;
+  if (n < 0) return "−" + Math.abs(n);
+  return "0";
+}
+function cls(n) { return n > 0 ? "pos" : n < 0 ? "neg" : "zero"; }
+function grand(s, id) {
+  return Object.values(s.games).reduce((sum, row) => sum + row[id], 0);
+}
+function gameNames(s) { return Object.keys(s.games); }
+function esc(v) {
+  return String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function liveGame(s) {
+  const custom = s.draft.custom.trim();
+  return custom || s.draft.game;
+}
+
+function statusBar() {
+  return '<div class="status"><span>9:41</span><span>Quorum</span></div>';
+}
+function avatar(id) {
+  return '<span class="avatar ' + id + '">' + NAMES[id].slice(0, 1) + "</span>";
+}
+function cols(s, row, interactive) {
+  return '<div class="cols">' + ORDER.map((id) => {
+    const pressed = s.member === id;
+    const tag = interactive ? "button" : "div";
+    const attrs = interactive
+      ? ' type="button" class="who" data-act="member" data-id="' + id + '" aria-pressed="' + pressed + '"'
+      : ' class="who"' + (pressed ? ' aria-pressed="true"' : "");
+    return "<" + tag + attrs + '><span class="name">' + NAMES[id] + '</span><span class="num ' + cls(row[id]) + '">' + fmt(row[id]) + "</span></" + tag + ">";
+  }).join("") + "</div>";
+}
+function equation(s) {
+  const id = s.member;
+  const parts = gameNames(s).map((name) => {
+    const hot = s.game === name ? " hot" : "";
+    return '<span class="' + hot.trim() + '">' + fmt(s.games[name][id]) + " " + esc(name) + "</span>";
+  }).join(" · ");
+  return '<p class="eq">' + fmt(grand(s, id)) + " = " + parts + "</p>";
+}
+function grandCard(s, interactive) {
+  const row = { ada: grand(s, "ada"), bea: grand(s, "bea"), cam: grand(s, "cam") };
+  return '<section class="grand"><p class="kicker">Grand total</p>' + cols(s, row, interactive) + equation(s) + "</section>";
+}
+function banner(s) {
+  if (!s.pending) return "";
+  const p = s.pending;
+  const you = p.signed.includes("ada");
+  const line = p.lines.map((l) => NAMES[l.member] + " " + fmt(l.delta)).join(", ");
+  const title = you ? "Waiting for 1 more signature" : "Needs your signature";
+  const detail = esc(p.game) + " · " + esc(line) + (you ? " · You signed" : " · " + esc(NAMES[p.by]) + " signed");
+  const action = you ? "" : '<button type="button" data-act="goto" data-screen="review">Review</button>';
+  return '<div class="banner"><div><b>' + title + "</b><span>" + detail + "</span></div>" + action + "</div>";
+}
+function chips(s, interactive) {
+  const names = ["all"].concat(gameNames(s));
+  return '<div class="chips">' + names.map((name) => {
+    const label = name === "all" ? "All games" : name;
+    const on = s.game === name;
+    if (!interactive) return '<span class="chip"' + (on ? ' aria-pressed="true"' : "") + ">" + esc(label) + "</span>";
+    return '<button type="button" class="chip" data-act="game" data-game="' + esc(name) + '" aria-pressed="' + on + '">' + esc(label) + "</button>";
+  }).join("") + "</div>";
+}
+function gameCard(s, name, interactive) {
+  return '<article class="game"><header><h3>' + esc(name) + "</h3></header>" + cols(s, s.games[name], interactive) + "</article>";
+}
+function tabs(current) {
+  const items = [["board", "Board"], ["activity", "Activity"], ["people", "People"]];
+  return '<nav class="tabbar">' + items.map(([id, label]) =>
+    '<button type="button" data-act="tab" data-screen="' + id + '" aria-current="' + (current === id) + '">' + label + "</button>"
+  ).join("") + "</nav>";
+}
+function phone(inner) {
+  return '<div class="phone"><div class="screen">' + inner + "</div></div>";
+}
+
+function screenBoard(s, interactive) {
+  const names = s.game === "all" ? gameNames(s) : [s.game];
+  const cards = names.map((name) => gameCard(s, name, false)).join("");
+  const record = interactive
+    ? '<button class="textbtn" type="button" data-act="goto" data-screen="record">Record</button>'
+    : '<span class="textbtn">Record</span>';
+  const toast = s.toast ? '<div class="toast">' + esc(s.toast) + "</div>" : "";
+  return statusBar() +
+    '<div class="scroll"><div class="toprow"><div><p class="kicker">Thursday Table · 2 of 3</p><h2 class="title">Scores</h2></div>' + record + '</div>' +
+    grandCard(s, interactive) + banner(s) + chips(s, interactive) + cards +
+    "</div>" + toast + tabs("board");
+}
+function screenGroups() {
+  return statusBar() +
+    '<div class="scroll"><p class="kicker">Your tallies</p><h2 class="title">Groups</h2>' +
+    '<button class="group-card" type="button" data-act="goto" data-screen="board"><div class="row"><strong>Thursday Table</strong><span>3</span></div><div class="meta"><span class="dot"></span>1 score waiting for you</div><div class="meta">Ada +18 · Bea +11 · Cam +7</div></button>' +
+    '<button class="group-card" type="button" data-act="goto" data-screen="forming"><div class="row"><strong>Weekend Spades</strong><span>2</span></div><div class="meta">Waiting for a third founder</div></button>' +
+    "</div>" + tabs("board");
+}
+function screenWelcome() {
+  return statusBar() +
+    '<div class="scroll"><p class="kicker">Quorum Score</p><h2 class="title">A tally the group has to sign.</h2>' +
+    '<p class="hint">Points show up only after a majority agrees. Your key stays on this phone.</p>' +
+    '<div class="keycard"><p class="kicker">Fingerprint</p><div class="fp">AB12 9F30<br>44C1 08DE</div><p class="hint" style="color:#d9d0c2">Read this aloud before someone adds you.</p></div>' +
+    '<div class="stack"><button class="primary" type="button" data-act="goto" data-screen="groups">I\'m new</button>' +
+    '<button class="secondary" type="button" data-act="goto" data-screen="people">I lost my phone</button></div></div>';
+}
+function screenRecord(s) {
+  const names = gameNames(s);
+  const chosen = liveGame(s);
+  const chipsHtml = names.map((name) =>
+    '<button type="button" class="chip" data-act="draft-game" data-game="' + esc(name) + '" aria-pressed="' + (s.draft.custom.trim() === "" && s.draft.game === name) + '">' + esc(name) + "</button>"
+  ).join("");
+  const rows = ORDER.map((id) =>
+    '<div class="person">' + avatar(id) + "<strong>" + NAMES[id] + '</strong><div class="stepper">' +
+    '<button type="button" data-act="dec" data-id="' + id + '" aria-label="Less for ' + NAMES[id] + '">−</button>' +
+    '<span class="num ' + cls(s.draft.lines[id]) + '">' + fmt(s.draft.lines[id]) + "</span>" +
+    '<button type="button" data-act="inc" data-id="' + id + '" aria-label="More for ' + NAMES[id] + '">+</button>' +
+    "</div></div>"
+  ).join("");
+  const ready = ORDER.some((id) => s.draft.lines[id] !== 0) && chosen.length > 0 && chosen.length <= 40;
+  const blocked = s.pending ? '<p class="warn">Bea\'s Chess score is still open. Review it before starting another. Only one of them can commit on top of today\'s tally.</p>' : "";
+  return statusBar() +
+    '<div class="scroll"><div class="toprow"><button class="back" type="button" data-act="goto" data-screen="board">Back</button></div>' +
+    '<p class="kicker">Ask the group</p><h2 class="title">Record</h2>' + blocked +
+    '<label class="lbl">Game</label><div class="chips">' + chipsHtml + "</div>" +
+    '<input class="field" data-act="custom" value="' + esc(s.draft.custom) + '" placeholder="Or a new game, like Chess">' +
+    rows +
+    '<label class="lbl">Note</label><input class="field" data-act="note" value="' + esc(s.draft.note) + '" placeholder="Optional, shown with the points">' +
+    '<p class="hint">You sign now. One more signature commits ' + esc(chosen || "this game") + ". Until then it stays off the totals.</p>" +
+    '<div class="stack"><button class="primary" type="button" data-act="submit-record"' + (ready && !s.pending ? "" : " disabled") + ">Ask 2 of 3</button></div></div>";
+}
+function deltaRow(label, before, after) {
+  return '<div class="compare"><div class="box"><b>' + esc(label) + " now</b><span class=\"num " + cls(before) + "\">" + fmt(before) + '</span></div><div class="arrow">→</div><div class="box"><b>After</b><span class="num ' + cls(after) + '">' + fmt(after) + "</span></div></div>";
+}
+function screenReview(s) {
+  const p = s.pending;
+  if (!p) {
+    return statusBar() + '<div class="scroll"><div class="toprow"><button class="back" type="button" data-act="goto" data-screen="board">Back</button></div><h2 class="title">Nothing to review</h2></div>' + tabs("board");
+  }
+  const lines = p.lines.map((l) => "<div class=\"person\">" + avatar(l.member) + "<div><strong>" + NAMES[l.member] + " " + fmt(l.delta) + "</strong><div class=\"meta\">" + esc(l.note || p.game) + "</div></div></div>").join("");
+  const compares = p.lines.map((l) => {
+    const beforeGame = s.games[p.game] ? s.games[p.game][l.member] : 0;
+    const beforeGrand = grand(s, l.member);
+    const sign = p.kind === "undo" ? -1 : 1;
+    const d = l.delta * sign;
+    return "<p class=\"kicker\" style=\"margin-top:14px\">" + esc(NAMES[l.member]) + "</p>" +
+      deltaRow(p.game, beforeGame, beforeGame + d) +
+      deltaRow("Grand total", beforeGrand, beforeGrand + d);
+  }).join("");
+  const waiting = p.signed.includes("ada");
+  const action = waiting
+    ? '<p class="hint">You already signed. Bea or Cam can commit this.</p>'
+    : '<button class="primary" type="button" data-act="sign">Sign</button><button class="secondary" type="button" data-act="goto" data-screen="board">Not now</button>';
+  return statusBar() +
+    '<div class="scroll"><div class="toprow"><button class="back" type="button" data-act="goto" data-screen="board">Back</button></div>' +
+    '<p class="kicker">' + esc(NAMES[p.by]) + " · " + (p.kind === "undo" ? "undo" : "score") + "</p><h2 class=\"title\">" + esc(p.game) + "</h2>" +
+    lines + compares +
+    '<div class="pips" style="margin-top:16px"><span class="pip on"></span><span class="pip' + (p.signed.length > 1 ? " on" : "") + '"></span><span>' + p.signed.length + " of 2 signed. Cam is not required.</span></div>" +
+    '<div class="stack">' + action + "</div></div>";
+}
+function screenActivity(s) {
+  const rows = s.activity.map((entry, index) => {
+    const bits = entry.lines.map((l) => NAMES[l.member] + " " + fmt(l.delta)).join(" · ");
+    return '<article class="ledger"><div class="row"><span class="tag">' + esc(entry.game) + "</span><span class=\"meta\">" + esc(entry.when) + "</span></div><strong>" + esc(bits) + "</strong><div class=\"meta\">Signed by " + entry.by.map((id) => NAMES[id]).join(", ") + '</div><button class="textbtn" type="button" data-act="undo" data-index="' + index + '">Undo this batch</button></article>';
+  }).join("");
+  return statusBar() + '<div class="scroll"><p class="kicker">Thursday Table</p><h2 class="title">Activity</h2>' + banner(s) + rows + '<p class="hint">Undo appends the reverse. The original row stays.</p></div>' + tabs("activity");
+}
+function screenPeople() {
+  const rows = ORDER.map((id) =>
+    '<div class="person">' + avatar(id) + "<div><strong>" + NAMES[id] + (id === "ada" ? " · you" : "") + "</strong><div class=\"meta\">" + (id === "ada" ? "This phone" : "Fingerprint checked") + "</div></div></div>"
+  ).join("");
+  return statusBar() +
+    '<div class="scroll"><p class="kicker">Thursday Table</p><h2 class="title">People</h2><div class="card">' + rows + "</div>" +
+    '<p class="hint">Scores commit with 2 of 3 signatures.</p>' +
+    '<div class="warn">A group of three cannot remove anyone. Add a fourth person first. The other two can still record scores.</div>' +
+    '<div class="stack"><button class="primary" type="button">Invite</button></div></div>' + tabs("people");
+}
+function screenForming() {
+  return statusBar() +
+    '<div class="scroll"><div class="toprow"><button class="back" type="button" data-act="goto" data-screen="groups">Back</button></div>' +
+    '<p class="kicker">New tally</p><h2 class="title">Weekend Spades</h2>' +
+    '<div class="card"><div class="seat">' + avatar("ada") + "<div><strong>Ada · you</strong><div class=\"meta\">Ready to sign</div></div></div>" +
+    '<div class="seat">' + avatar("bea") + "<div><strong>Bea</strong><div class=\"meta\">Joined · AB90 11C2</div></div></div>" +
+    '<div class="seat"><span class="empty-seat"></span><div><strong>Third founder</strong><div class="meta">Share the code</div></div></div></div>' +
+    '<div class="keycard"><p class="kicker">Invite code</p><div class="fp">MQ-4412</div></div>' +
+    '<p class="hint">Sign stays off until three people are listed. Everyone on the list signs this roster.</p>' +
+    '<div class="stack"><button class="primary" type="button" disabled>Sign roster</button></div></div>';
+}
+function screenFrozen(s) {
+  return statusBar() +
+    '<div class="scroll"><p class="kicker">Thursday Table</p><h2 class="title">Tally stopped</h2>' +
+    '<div class="warn">Two different histories were signed. These are the totals from before the split. Nothing new can be added. Start a new group to keep playing.</div>' +
+    grandCard(s, false) + '<p class="hint">Game columns from that same prefix stay visible. They cannot grow.</p>' +
+    chips(s, false) + gameNames(s).map((name) => gameCard(s, name, false)).join("") +
+    '<div class="stack"><button class="primary" type="button" data-act="goto" data-screen="forming">Start a new group</button></div></div>';
+}
+
+const RENDER = {
+  welcome: screenWelcome,
+  groups: screenGroups,
+  board: screenBoard,
+  record: screenRecord,
+  review: screenReview,
+  activity: screenActivity,
+  people: screenPeople,
+  forming: screenForming,
+  frozen: screenFrozen
+};
+
+function renderScreen(s, interactive) {
+  const fn = RENDER[s.screen] || screenBoard;
+  if (s.screen === "board" || s.screen === "record" || s.screen === "review" || s.screen === "activity" || s.screen === "frozen") {
+    return fn(s, interactive);
+  }
+  return fn(s, interactive);
+}
+
+function drawHero() {
+  document.getElementById("hero").innerHTML = phone(renderScreen(state, true));
+  document.getElementById("blurb-title").textContent = (SCREENS.find((x) => x[0] === state.screen) || ["", "Board"])[1];
+  document.getElementById("blurb").innerHTML = (BLURB[state.screen] || []).map((line) => "<li>" + line + "</li>").join("");
+  document.getElementById("pills").innerHTML = SCREENS.map(([id, label]) =>
+    '<button type="button" data-jump="' + id + '" aria-current="' + (state.screen === id) + '">' + label + "</button>"
+  ).join("");
+}
+function drawGallery() {
+  const base = fresh();
+  document.getElementById("gallery").innerHTML = SCREENS.map(([id, label]) => {
+    const s = fresh();
+    s.screen = id;
+    s.toast = "";
+    if (id === "frozen" || id === "record") s.pending = null;
+    return '<div class="shot"><div class="shot-scale">' + phone(renderScreen(s, false)) + '</div><button class="jump" type="button" data-jump="' + id + '">' + label + "</button></div>";
+  }).join("");
+  base.screen = "board";
+}
+
+function setScreen(id) {
+  state.screen = id;
+  state.toast = "";
+  drawHero();
+}
+function submitRecord() {
+  const game = liveGame(state).trim();
+  const lines = ORDER.filter((id) => state.draft.lines[id] !== 0).map((id) => ({
+    member: id, delta: state.draft.lines[id], note: state.draft.note.trim()
+  }));
+  if (!game || lines.length === 0 || state.pending) return;
+  if (!state.games[game]) state.games[game] = { ada: 0, bea: 0, cam: 0 };
+  state.pending = { by: "ada", game: game, lines: lines, signed: ["ada"], kind: "score" };
+  state.draft = { game: game, custom: "", lines: { ada: 0, bea: 0, cam: 0 }, note: "" };
+  state.game = game;
+  state.toast = "Off the totals until one more person signs.";
+  state.screen = "board";
+  drawHero();
+}
+function commitPending() {
+  const p = state.pending;
+  if (!p || p.signed.length < 2) { drawHero(); return; }
+  if (!state.games[p.game]) state.games[p.game] = { ada: 0, bea: 0, cam: 0 };
+  const sign = p.kind === "undo" ? -1 : 1;
+  p.lines.forEach((line) => { state.games[p.game][line.member] += line.delta * sign; });
+  state.activity.unshift({
+    game: p.game,
+    lines: p.lines.map((l) => ({ member: l.member, delta: l.delta * sign, note: l.note })),
+    by: p.signed.slice(),
+    when: "Just now"
+  });
+  const label = p.game;
+  state.pending = null;
+  state.game = label;
+  state.toast = label + " is in the totals. 2 of 3 signed.";
+  state.screen = "board";
+  drawHero();
+}
+function signPending() {
+  const p = state.pending;
+  if (!p || p.signed.includes("ada")) return;
+  p.signed.push("ada");
+  commitPending();
+}
+function beaSigns() {
+  const p = state.pending;
+  if (!p) { state.toast = "Nothing is waiting for a signature."; drawHero(); return; }
+  if (!p.signed.includes("bea")) p.signed.push("bea");
+  else if (!p.signed.includes("cam")) p.signed.push("cam");
+  commitPending();
+}
+function askUndo(index) {
+  if (state.pending) {
+    state.toast = "Finish the open score before an undo.";
+    state.screen = "activity";
+    drawHero();
+    return;
+  }
+  const entry = state.activity[index];
+  state.pending = {
+    by: "ada",
+    game: entry.game,
+    lines: entry.lines.map((l) => ({ member: l.member, delta: l.delta, note: "undo" })),
+    signed: ["ada"],
+    kind: "undo"
+  };
+  state.toast = "Undo waits for one more signature. Totals stay.";
+  state.screen = "board";
+  drawHero();
+}
+
+document.getElementById("hero").addEventListener("click", (event) => {
+  const el = event.target.closest("[data-act]");
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === "goto" || act === "tab") setScreen(el.dataset.screen);
+  if (act === "member") { state.member = el.dataset.id; drawHero(); }
+  if (act === "game") { state.game = el.dataset.game; drawHero(); }
+  if (act === "draft-game") { state.draft.game = el.dataset.game; state.draft.custom = ""; drawHero(); }
+  if (act === "inc" || act === "dec") {
+    const id = el.dataset.id;
+    const next = state.draft.lines[id] + (act === "inc" ? 1 : -1);
+    if (next >= -20 && next <= 20) state.draft.lines[id] = next;
+    drawHero();
+  }
+  if (act === "submit-record") submitRecord();
+  if (act === "sign") signPending();
+  if (act === "undo") askUndo(Number(el.dataset.index));
+});
+document.getElementById("hero").addEventListener("input", (event) => {
+  const el = event.target;
+  if (el.dataset.act === "custom") state.draft.custom = el.value;
+  if (el.dataset.act === "note") state.draft.note = el.value;
+  if (el.dataset.act === "custom") {
+    const ask = document.querySelector('#hero [data-act="submit-record"]');
+    const ready = ORDER.some((id) => state.draft.lines[id] !== 0) && liveGame(state).trim().length > 0 && !state.pending;
+    if (ask) ask.disabled = !ready;
+  }
+});
+document.body.addEventListener("click", (event) => {
+  const jump = event.target.closest("[data-jump]");
+  if (!jump) return;
+  setScreen(jump.dataset.jump);
+});
+document.getElementById("cosign").addEventListener("click", beaSigns);
+document.getElementById("reset").addEventListener("click", () => {
+  state = fresh();
+  drawHero();
+});
+
+const forced = new URLSearchParams(location.search).get("screen");
+if (forced && RENDER[forced]) {
+  state.screen = forced;
+  if (forced === "record") state.pending = null;
+  document.body.classList.add("solo");
+}
+drawGallery();
+drawHero();
+</script>
+</body>
+</html>
